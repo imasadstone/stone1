@@ -10,8 +10,10 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.TreeSet;
 
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 import model.BookData;
 import view.Figure2;
@@ -48,7 +50,7 @@ public class Figure2Controller implements MouseListener{
     }
 	 public static void write(BookData book) {
 	        try {
-	            File f = new File("C:\\Users\\ADMIN\\eclipse-workspace\\BookManagement\\src\\model\\Books.dat");
+	            File f = new File("C:\\Users\\ADMIN\\git\\repository\\BookManagement2Copy\\src\\model\\Books.dat");
 	            FileOutputStream fo;
 	            ObjectOutputStream oStream = null;
 	            if (!f.exists()) {
@@ -74,34 +76,31 @@ public class Figure2Controller implements MouseListener{
 	            e.printStackTrace();
 	        }
 	    }
-//	public void writeFile(String bookId, String authors, String title, String dateOfPublication,String categories) throws IOException {
-//        try {
-//        	File file = new File("C:\\Users\\ADMIN\\eclipse-workspace\\BookManagement\\src\\model\\Books.dat");
-//			FileOutputStream out = new FileOutputStream(file);
-//            ObjectOutputStream oos = new ObjectOutputStream(out); 
-//            BookData book = new BookData(bookId, authors, title, dateOfPublication, categories);
-//            oos.writeObject(book);
-//            oos.close();
-//        } catch (IOException ex) {
-//            ex.printStackTrace();
-//        }
-//    }
+	 public void clearText() {
+		 f2.textFieldBook.setText("");
+		 f2.textFieldAuthor.setText("");
+		 f2.textFieldTitle.setText("");
+		 f2.textFieldDop.setText("");
+		 f2.textFieldCatego.setText("");
+	 }
 	public void mouseClicked(MouseEvent e) {
 		Object command = e.getSource();
 		if(command == f2.enterButton) {
-			f2.textFieldBook.setText("");
-			f2.textFieldAuthor.setText("");
-			f2.textFieldTitle.setText("");
-			f2.textFieldDop.setText("");
-			f2.textFieldCatego.setText("");
-		}else if(command == f2.saveButton) {
 			bd.setBookId(f2.textFieldBook.getText());
 			bd.setAuthors(f2.textFieldAuthor.getText());
 			bd.setTitle(f2.textFieldTitle.getText());
 			bd.setDateOfPublication(f2.textFieldDop.getText());
 			bd.setCategories(f2.textFieldCatego.getText());
 			BookData book = new BookData(bd.getBookId(), bd.getAuthors(), bd.getTitle(), bd.getDateOfPublication(), bd.getCategories());
-			write(book);
+			bd.tsb = bd.treeSetBoook(book);
+			clearText();
+			JOptionPane.showMessageDialog(f2, "Nhập thành công", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+			
+		}else if(command == f2.saveButton) {
+			for (BookData book : bd.tsb) {
+				write(book);
+			}
+			JOptionPane.showMessageDialog(f2, "Lưu thành công", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
 		}else if(command == f2.closeButton) {
 			f2.setVisible(false);
 		}

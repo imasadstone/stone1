@@ -2,13 +2,17 @@ package model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.TreeSet;
 
-public class BookData implements Serializable{
+import javax.swing.text.StyledEditorKit.ForegroundAction;
+
+public class BookData implements Serializable, Comparable<BookData>{
 	private String bookId;
 	private String authors;
 	private String title;
 	private String dateOfPublication;
 	private String categories;
+	public TreeSet<BookData> tsb = new TreeSet<BookData>();
 	
 	public BookData(String bookId, String authors, String title, String dateOfPublication, String categories) {
 		super();
@@ -67,5 +71,27 @@ public class BookData implements Serializable{
 		return "BookData [bookId=" + bookId + ", authors=" + authors + ", title=" + title + ", dateOfPublication="
 				+ dateOfPublication + ", categories=" + categories + "]";
 	}
-	
+
+	public int compareTo(BookData o) {
+		String b1 = this.bookId;
+		String b2 = o.bookId;
+		return b1.compareTo(b2);
+	}
+	public TreeSet<BookData> treeSetBoook(BookData book) {
+		if(tsb.size() == 0) {
+			tsb.add(book);
+		}else {
+			for (BookData bookData : tsb) {
+				if(bookData.bookId.equals(book.bookId)) {
+					tsb.remove(bookData);
+					tsb.add(book);
+					break;
+				}
+			}
+			tsb.add(book);
+		}
+		
+		return tsb;
+	}
+
 }
